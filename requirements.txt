@@ -55,3 +55,8 @@ typing-inspection==0.4.1
 typing_extensions==4.14.0
 tzdata==2025.2
 urllib3==2.5.0
+google-generativeai
+langchain-google-genai
+langchain
+langgraph[all]
+google-cloud-aiplatform
