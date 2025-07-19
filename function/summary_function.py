@@ -228,34 +228,9 @@ class NewsSummaryAgent:
         "iteration":state.get("iteration",1)
     }
 
-  agent = NewsSummaryAgent()
-  self.graph = StateGraph(state_schema=NewsSummaryState)
+  
 
-  self.graph.add_node("generate_initial_summary", agent.generate_initial_summary)
-  self.graph.add_node("generate_feedback",agent.generate_feedback_check_eval)
-  self.graph.add_node("refine_summary",agent.refine_summary)
-  self.graph.add_node("should_stop",agent.should_stop)
-  self.graph.add_node("final_output",agent.final_output)
-
-  self.graph.set_entry_point("generate_initial_summary")
-  self.graph.add_edge("generate_initial_summary","generate_feedback")
-  self.graph.add_edge("generate_feedback","should_stop")
-  self.graph.add_edge("refine_summary","generate_feedback")
-
-
-  self.graph.add_conditional_edges(
-    "should_stop",
-    lambda x: x['next_step'],
-    {
-        "yes":"final_output",
-        "no":"refine_summary"
-    }
-    )
-
-  self.graph.set_finish_point("final_output")
-  self.runnable = self.graph.compile()
-
-def run_batch_parallel(self, df: pd.DataFrame, max_workers: int = 5):
+  def run_batch_parallel(self, df: pd.DataFrame, max_workers: int = 5):
     results = []
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {
@@ -276,5 +251,36 @@ def run_batch_parallel(self, df: pd.DataFrame, max_workers: int = 5):
                 results.append(None)
     return results
 
+def build_summary_graph(agent: NewsSummaryAgent) -> Runnable:
+    agent = NewsSummaryAgent()
+    graph = StateGraph(state_schema=NewsSummaryState)
+    graph.add_node("generate_initial_summary", agent.generate_initial_summary)
+    graph.add_node("generate_feedback",agent.generate_feedback_check_eval)
+    graph.add_node("refine_summary",agent.refine_summary)
+    graph.add_node("should_stop",agent.should_stop)
+    graph.add_node("final_output",agent.final_output)
+    graph.set_entry_point("generate_initial_summary")
+    graph.add_edge("generate_initial_summary","generate_feedback")
+    graph.add_edge("generate_feedback","should_stop")
+    graph.add_edge("refine_summary","generate_feedback")
+    graph.add_conditional_edges(
+        "should_stop",
+        lambda x: x['next_step'],
+        {
+            "yes":"final_output",
+            "no":"refine_summary"
+        }
+        )
 
+    graph.set_finish_point("final_output")
+    return graph.compile()
 
+def summarize_article(article_text:str) -> dict:
+   agent = NewsSummaryAgent()
+   runnable = build_summary_graph(agent)
+   return runnable.invoke({
+      "article":article_text,
+      "summary":"",
+      "feedback":"",
+      "iteration":0
+   })
