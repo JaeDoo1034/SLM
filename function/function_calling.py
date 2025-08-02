@@ -3,10 +3,6 @@ import json
 
 from function.stock_data import get_today_yield
 
-client = OpenAI(api_key='')
-
-messages = [{"role": "user", "content": "삼성전자 수익률 알려줘"}]
-
 tools = [
     {
         "type": "function",
@@ -26,12 +22,11 @@ tools = [
     }
 ]
 
-
-def function_calling_gpt(input_message):
+def function_calling_api(client, model, input_messages):
     response = client.responses.create(
-        model="gpt-4o-mini",
+        model=model,
         input=input_messages,
-        tools=tools
+        tools=tools,
     )
 
     print("첫번재 응답")
@@ -50,14 +45,19 @@ def function_calling_gpt(input_message):
     })
 
     response_2 = client.responses.create(
-        model="gpt-4o-mini",
+        model=model,
         input=input_messages,
         tools=tools,
     )
 
-
     print(response_2.output_text)
     return response_2.output_text
+
+def function_calling_gpt(input_messages):
+    client = OpenAI(
+        api_key='')
+
+    return function_calling_api(client, "gpt-4o-mini", input_messages)
 
 if __name__ == "__main__":
     print("test function calling~")
