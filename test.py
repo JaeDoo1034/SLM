@@ -1,4 +1,4 @@
-import streamlit as st
+import t_streamlit as st
 import time
 import graphviz
 

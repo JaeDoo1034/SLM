@@ -1,7 +1,8 @@
 import asyncio
 import json
 from datetime import datetime, timedelta
-from server import (
+from mcp_server import (
+    call_sync,
     inquery_stock_price,
     inquery_balance,
     order_stock,
@@ -141,19 +142,20 @@ async def test_stock_ask():
         print(f"Error testing stock ask: {e}")
 
 
-async def main():
+def main():
     """Run all tests"""
-    print("Starting KIS MCP Server tests...")
-    
+
+    call_sync(test_domestic_stock, "005930", "Samsung Electronics")
+
     # Domestic stock tests
-    await test_domestic_stock("005930", "Samsung Electronics")
-    await test_balance()
-    await test_order_stock()
-    await test_order_list()
-    await test_order_detail()
-    await test_stock_info()
-    await test_stock_history()
-    await test_stock_ask()
+    # await test_domestic_stock("005930", "Samsung Electronics")
+    # await test_balance()
+    # await test_order_stock()
+    # await test_order_list()
+    # await test_order_detail()
+    # await test_stock_info()
+    # await test_stock_history()
+    # await test_stock_ask()
     #await test_stock_market()
     
     # Overseas stock tests
@@ -162,5 +164,6 @@ async def main():
     print("\nAll tests completed!")
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    #asyncio.run(main())
+    main()
     

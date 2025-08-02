@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 import httpx
 from mcp.server.fastmcp.server import FastMCP
 
-from envs import *
+from .envs import *
 
 
 # Create MCP instance
@@ -710,6 +710,12 @@ async def inquery_overseas_stock_price(symbol: str, market: str):
             raise Exception(f"Failed to get overseas stock price: {response.text}")
 
         return response.json()
+
+def call_sync(function, *args):
+    async def async_function():
+        return await function(*args)
+
+    return asyncio.run(async_function())
 
 if __name__ == "__main__":
     logger.info("Starting MCP server...")

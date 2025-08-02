@@ -14,7 +14,7 @@ logging.basicConfig(
 # Load environment variables from .env file
 load_dotenv()
 
-logger = logging.getLogger("mcp-server")
+logger = logging.getLogger("slm_mcp-server")
 # Global strings for API endpoints and paths
 DOMAIN = "https://openapi.koreainvestment.com:9443"
 VIRTUAL_DOMAIN = "https://openapivts.koreainvestment.com:29443"  # 모의투자

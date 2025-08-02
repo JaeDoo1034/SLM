@@ -1,6 +1,7 @@
 import json
 from datetime import datetime, timedelta
-from server import (
+from slm_mcp.mcp_server import (
+    call_sync,
     inquery_stock_price,
     inquery_balance,
     order_stock,
@@ -13,19 +14,11 @@ from server import (
     inquery_overseas_stock_price
 )
 
-class StockData():
-    stock_code = ''
 
-    def __init__(self, stock_code):
-        self.stock_code = stock_code
+def get_today_yield(stock_code):
+    # AAPL 현재가 조회
+    result = call_sync(inquery_stock_price, stock_code)
+    print("\nStock Info Response:")
+    print(json.dumps(result, indent=2, ensure_ascii=False))
 
-    async def get_today_yield(self):
-        # AAPL 현재가 조회
-        result = await inquery_overseas_stock_price(
-            symbol="AAPL",
-            market="NASD"
-        )
-        print("\nOverseas Stock Price Response:")
-        print(json.dumps(result, indent=2, ensure_ascii=False))
-
-        return '금일 ' + self.stock_code + '의 수익률은 5%입니다.'
+    return result['prdy_ctrt']
