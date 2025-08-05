@@ -38,8 +38,8 @@ class GetNewsData:
                 raise ValueError("API 키가 설정되지 않았습니다.")
         except Exception as e:
             print(f"API Key 로드 실패: {e}")
-            self.client_id = "B5EoJKo3wpG3YkuddH_6"
-            self.client_secret = "s0HcPfF6S_"
+            self.client_id = "aa"
+            self.client_secret = "aa"
 
         self.articles_per_stock = articles_per_stock
         self.max_workers = max_workers
