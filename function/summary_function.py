@@ -22,7 +22,7 @@ class NewsSummaryState(TypedDict):
 class NewsSummaryAgent:
   def __init__(self,
                location:str = "us-central1",
-               model_name = "gemini-2.5-flash-preview-05-20",
+               model_name = "gemini-2.5-flash-lite"	,
                **config_kwargs
                ):
     load_dotenv() # .env 파일에서 환경변수 로딩
@@ -44,12 +44,14 @@ class NewsSummaryAgent:
           candidate_count = config_kwargs.get("candidate_count", 1),
     )
 
+    #runnable
+    self.runnable = build_summary_graph(self)
+
     # # SafetySetting 객체 리스트를 직접 생성하여 전달합니다.
     # self.safety_settings = config_kwargs.get("safety_settings",[
     #     SafetySetting(category=HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold=SafetySetting.SafetyThreshold.BLOCK_LOW_AND_ABOVE),
     #     SafetySetting(category=SafetySetting.HarmCategory.HARM_CATEGORY_HARASSMENT, threshold=SafetySetting.SafetyThreshold.BLOCK_LOW_AND_ABOVE),
     # ])
-
 
   def _call_llm_stand_alone(self, prompt:str, **kwargs) -> str:
     """
@@ -110,7 +112,7 @@ class NewsSummaryAgent:
 
       - 계약에 비경쟁·비유인·비밀유지 조항 포함, 회사 이익 보호 목적
         계약 종료 시에는 모든 직책에서 사임해야 하며, 복리후생 및 유족 보상 조항도 명시됨.
-
+      
       🔑 키워드
       - 다이아몬드힐인베스트먼트그룹 (Diamond Hill Investment Group, DHIL)
       - Heather E. Brilliant
@@ -231,6 +233,10 @@ class NewsSummaryAgent:
   
 
   def run_batch_parallel(self, df: pd.DataFrame, max_workers: int = 5):
+    if isinstance(df, pd.Series):
+       df = pd.DataFrame({'article':df})
+    elif not isinstance(df, pd.DataFrame):
+       raise ValueError("Input must be a pandas DataFrame or Series")
     results = []
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {
@@ -252,7 +258,7 @@ class NewsSummaryAgent:
     return results
 
 def build_summary_graph(agent: NewsSummaryAgent) -> Runnable:
-    agent = NewsSummaryAgent()
+    #agent = NewsSummaryAgent()
     graph = StateGraph(state_schema=NewsSummaryState)
     graph.add_node("generate_initial_summary", agent.generate_initial_summary)
     graph.add_node("generate_feedback",agent.generate_feedback_check_eval)

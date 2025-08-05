@@ -60,3 +60,6 @@ langchain-google-genai
 langchain
 langgraph[all]
 google-cloud-aiplatform
+beautifulsoup4
+yfinance
+finance-datareader
