@@ -74,3 +74,9 @@ fastmcp>=2.5.1
 mcp>=1.9.1
 pathlib>=1.0.1
 python-dotenv>=1.1.0
+
+google-generativeai
+langchain-google-genai
+langchain
+langgraph[all]
+google-cloud-aiplatform
