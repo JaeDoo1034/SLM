@@ -3,6 +3,8 @@ import json
 
 from function.stock_data import get_today_yield
 
+OPEN_AI_API_KEY = ''
+
 tools = [
     {
         "type": "function",
@@ -55,7 +57,7 @@ def function_calling_api(client, model, input_messages):
 
 def function_calling_gpt(input_messages):
     client = OpenAI(
-        api_key='')
+        api_key=OPEN_AI_API_KEY)
 
     return function_calling_api(client, "gpt-4o-mini", input_messages)
 
