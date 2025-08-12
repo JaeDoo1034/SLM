@@ -25,6 +25,7 @@ async def test_domestic_stock(symbol: str, name: str):
     try:
         result = await inquery_stock_price(symbol=symbol)
         print(f"\n{name} ({symbol}):")
+        print(f"sector: {result['bstp_kor_isnm']}")
         print(f"Current price: {result['stck_prpr']}")
         print(f"Change: {result['prdy_vrss']} ({result['prdy_ctrt']}%)")
         print(f"Volume: {result['acml_vol']}")

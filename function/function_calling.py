@@ -13,7 +13,7 @@ tools = [
             "properties": {
                 "stock_code": {
                     "type": "string",
-                    "description": "종목코드, e.g. A005930, A69500",
+                    "description": "종목코드, e.g. 005930, 069500",
                 }
             },
             "required": ["stock_code"],
@@ -35,7 +35,7 @@ def function_calling_api(client, model, input_messages):
     tool_call = response.output[0]
     args = json.loads(tool_call.arguments)
 
-    result = get_today_yield(*args)
+    result = get_today_yield(**args)
 
     input_messages.append(tool_call)  # append model's function call message
     input_messages.append({  # append result message
@@ -62,8 +62,9 @@ def function_calling_gpt(input_messages):
 if __name__ == "__main__":
     print("test function calling~")
 
-    input_messages = [{"role": "user", "content": "삼성전자 수익률 알려줘"}]
+    input_messages = [{"role": "user", "content": "삼성전자 종목 수익률 알려줘"}]
 
     result = function_calling_gpt(input_messages)
 
+    print("result function calling~")
     print(result)
