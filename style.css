@@ -1,0 +1,440 @@
+/*
+ * 공통 스타일 시트
+ * AI 뉴스 알림 서비스 퍼블리싱을 위한 CSS 정의입니다.
+ * 다크 모드를 기본으로 하고, 포인트 색상을 이용하여 현대적인 분위기를 구현했습니다.
+ */
+@charset "UTF-8";
+
+/* 색상 변수 정의 */
+:root {
+  /* 밝은 모드 색상 팔레트 정의 */
+  /* 전체 테마를 더 밝고 따뜻한 느낌으로 조정 */
+  --bg-color: #f7f9fc;        /* 전체 페이지 배경을 거의 흰색에 가깝게 */
+  --card-bg: #ffffff;         /* 카드 기본 배경은 완전히 흰색 */
+  --section-bg: #f9fbfe;      /* 섹션 박스 배경은 살짝 톤을 준 흰색 */
+  /* 포인트 색상: 너무 진하지 않도록 조금 밝은 톤으로 수정 */
+  --accent-color: #006fd6;    /* 기본 강조 색상 */
+  --accent-secondary: #2cb456;/* 긍정 수치 색상 */
+  --warning-color: #dc3545;   /* 부정 수치 색상 */
+  --text-primary: #212529;    /* 기본 글자색 */
+  --text-secondary: #495057;  /* 보조 글자색 */
+  --divider-color: #e0e6ef;    /* 구분선 색상 */
+  --kakao-color: #fee500;
+  --sms-color: #4caf50;
+  --url-color: #5a63c9;
+}
+
+/* 기본 설정 */
+html, body {
+  margin: 0;
+  padding: 0;
+  /* 보다 가독성 높은 기본 글꼴 설정. 한글과 영문 모두 안정적으로 표시되는 글꼴을 사용 */
+  font-family: 'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Arial', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  height: 100%;
+}
+
+/* 컨테이너: 화면 중앙 정렬 */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 스마트폰 모양 박스 */
+.phone {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--card-bg);
+  border-radius: 20px;
+  /* 밝은 모드에서는 더 부드러운 그림자를 사용 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 헤더 */
+.phone-header {
+  position: relative;
+  background-color: var(--section-bg);
+  padding: 14px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid var(--divider-color);
+}
+.phone-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+.close-btn {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 24px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.close-btn:hover {
+  color: var(--accent-color);
+}
+
+/* 본문 영역 */
+.phone-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 정보 박스 공통 */
+.info-box {
+  background-color: var(--section-bg);
+  border-radius: 14px;
+  padding: 16px 16px 12px;
+  margin-bottom: 16px;
+  /* 밝은 모드에서는 subtle 그림자 */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 1px var(--divider-color);
+}
+.section-title {
+  margin: 0 0 8px;
+  font-size: 16px; /* 섹션 제목 글꼴 크기 증가 */
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+/* 평가금액 스타일 */
+.eval-box .amount {
+  font-size: 32px; /* 평가금액을 더 크게 표시 */
+  font-weight: bold;
+}
+.eval-box .unit {
+  font-size: 16px;
+  margin-left: 4px;
+}
+
+/* 투자수익률 현황 그리드 */
+.return-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  font-size: 15px;
+}
+.label-col span,
+.value-col span {
+  display: block;
+  line-height: 1.6;
+}
+.value-col .positive {
+  color: var(--accent-secondary);
+  font-weight: bold;
+}
+.value-col .negative {
+  color: var(--warning-color);
+  font-weight: bold;
+}
+
+/* 파이 차트 영역 */
+.pie-wrapper {
+  display: flex;
+  align-items: center;
+}
+.pie-chart {
+  width: 100px;
+  height: 100px;
+  margin-right: 20px;
+  border-radius: 50%;
+  /* conic-gradient로 단순 파이차트 구현 */
+  background: conic-gradient(
+    var(--accent-color) 0deg 230.4deg,
+    var(--warning-color) 230.4deg 353.6deg,
+    #dee2e6 353.6deg 360deg
+  );
+}
+.pie-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.pie-legend li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.legend-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 6px;
+  display: inline-block;
+}
+.legend-color.guarantee {
+  background-color: var(--accent-color);
+}
+.legend-color.invest {
+  background-color: var(--warning-color);
+}
+.legend-color.cash {
+  background-color: #dee2e6;
+}
+
+/* 자산 목록 */
+.asset-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.asset-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--divider-color);
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.asset-list li:last-child {
+  border-bottom: none;
+}
+.asset-list .arrow {
+  color: var(--text-secondary);
+  font-weight: bold;
+}
+
+/* CTA 박스 */
+.cta-box {
+  text-align: center;
+  margin-top: 12px;
+}
+.cta-text {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 버튼 스타일 */
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  border-radius: 8px;
+  padding: 10px 20px;
+  transition: background 0.2s ease;
+}
+.primary-btn {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  font-weight: bold;
+}
+.primary-btn:hover {
+  background-color: #61baff;
+}
+.secondary-btn {
+  background-color: #f0f2f5;
+  color: var(--text-secondary);
+  font-weight: bold;
+  border: 1px solid var(--divider-color);
+}
+.secondary-btn:hover {
+  background-color: #e2e6ed;
+}
+.secondary-btn.wide {
+  width: 100%;
+}
+
+/* 모달 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* 어두운 오버레이 대신 살짝 어둡게 투명도를 낮춰 부드럽게 */
+  background-color: rgba(0, 0, 0, 0.3);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal {
+  background-color: var(--card-bg);
+  padding: 20px;
+  border-radius: 14px;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.modal-message {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.modal-message strong {
+  color: var(--accent-color);
+}
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* 요약 카드 */
+.summary-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.summary-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* 밝은 배경 이미지를 사용하여 요약 카드가 어둡지 않도록 변경 */
+  background-image: url('assets/ai_light_bg.png');
+  background-size: cover;
+  background-position: center;
+  /* 이미 자체적으로 밝기 조절이 되어 있으므로 추가 필터는 적용하지 않음 */
+  filter: none;
+}
+.summary-content {
+  position: relative;
+  padding: 16px;
+  color: var(--text-primary);
+}
+.summary-title {
+  margin: 0 0 8px;
+  font-size: 16px; /* 요약 제목 크기 증가 */
+  line-height: 1.4;
+}
+.summary-title .highlight {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+.source-link {
+  font-size: 13px;
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+.description {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+.market-summary {
+  margin-top: 12px;
+  border-top: 1px solid var(--divider-color);
+  padding-top: 8px;
+}
+.market-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.market-item .negative {
+  color: var(--warning-color);
+}
+.market-item .positive {
+  color: var(--accent-secondary);
+}
+
+/* 기사 보기 */
+.news-article {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.article-title {
+  margin: 0;
+  font-size: 20px; /* 기사 제목을 크게 */
+  font-weight: bold;
+  color: var(--text-primary);
+}
+.article-meta {
+  font-size: 13px;
+  margin: 4px 0 16px;
+  color: var(--text-secondary);
+}
+.article-text {
+  margin-bottom: 12px;
+}
+
+/* 공유 버튼 및 패널 */
+.share-trigger {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px; /* 공유하기 버튼 글꼴 크기 */
+}
+.share-trigger:hover {
+  background-color: #61baff;
+}
+.share-panel {
+  display: none;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: var(--section-bg);
+  /* 밝은 모드에 맞추어 그림자 투명도 감소 */
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+.share-panel.active {
+  display: block;
+}
+.share-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.share-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  color: #0a172b;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+.share-btn.kakao {
+  background-color: var(--kakao-color);
+}
+.share-btn.sms {
+  background-color: var(--sms-color);
+  color: #ffffff;
+}
+.share-btn.url {
+  background-color: var(--url-color);
+  color: #ffffff;
+}
+.share-btn:hover {
+  filter: brightness(1.05);
+}
+.share-label {
+  display: block;
+}
