@@ -13,11 +13,11 @@ with duckdb.connect('../DB/news.db') as news_con:
     ## 지금은 File에서 바로 DB 테이블로 저장
     file_path = '../data/{}.csv'
     try:
-        df_1 = pd.read_csv(file_path.format(경제정책),index_col=[0],encoding='utf-8-sig')
-        df_2 = pd.read_csv(file_path.format(거시경제),index_col=[0],encoding='utf-8-sig')
-        df_3 = pd.read_csv(file_path.format(고용복지),index_col=[0],encoding='utf-8-sig')
-        df_4 = pd.read_csv(file_path.format(세금),index_col=[0],encoding='utf-8-sig')
-        df_5 = pd.read_csv(file_path.format(외환시장),index_col=[0],encoding='utf-8-sig')
+        df_1 = pd.read_csv(file_path.format('경제정책'),index_col=[0],encoding='utf-8-sig')
+        df_2 = pd.read_csv(file_path.format('거시경제'),index_col=[0],encoding='utf-8-sig')
+        df_3 = pd.read_csv(file_path.format('고용복지'),index_col=[0],encoding='utf-8-sig')
+        df_4 = pd.read_csv(file_path.format('세금'),index_col=[0],encoding='utf-8-sig')
+        df_5 = pd.read_csv(file_path.format('외환시장'),index_col=[0],encoding='utf-8-sig')
 
         # 임시 테이블 등록하기
         news_con.register("df_1", df_1)
