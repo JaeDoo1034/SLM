@@ -1,7 +1,7 @@
 from openai import OpenAI
 import json
 
-from function.stock_data import get_today_yield
+from stock_data import get_today_yield
 
 OPEN_AI_API_KEY = ''
 

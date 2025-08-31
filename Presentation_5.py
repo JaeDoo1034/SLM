@@ -2,6 +2,8 @@ import streamlit as st
 from textwrap import dedent
 import re
 
+from function import stock_data
+
 # ---------------- Page Config ----------------
 st.set_page_config(
     page_title="MY 퇴직연금관리",
@@ -511,14 +513,17 @@ def open_news_modal():
     @st.dialog("종목 뉴스 기사")
     def _news_dlg():
         cats = ["전체","우리금융지주","삼성화재","삼성생명","카카오뱅크","메리츠금융지주"]
+        codes = ["ALL", "316140", "000810", "032830", "323410", "138040"]
         with st.container():
             st.markdown('<span class="chipbar-scope"></span>', unsafe_allow_html=True)
-            st.markdown('기준일자 : 2025.08.29')
             cols = st.columns(len(cats), gap="small")
             for i, c in enumerate(cats):
                 with cols[i]:
                     if st.session_state.news_active_tab == c:
-                        st.markdown(f'<span class="chip">{c + " +5%"}</span>', unsafe_allow_html=True)
+                        yield_str = ""
+                        if codes[i] != "ALL":
+                            yield_str = f" ({stock_data.get_today_yield(codes[i])})"
+                        st.markdown(f'<span class="chip">{f"{c}{yield_str}"}</span>', unsafe_allow_html=True)
                     else:
                         if st.button(c, key=f"news_tab_{c}"):
                             st.session_state.news_active_tab = c
@@ -551,14 +556,20 @@ def open_news_alert_modal():
     @st.dialog("종목기사")
     def _alert_dlg():
         cats = ["우리금융지주"]
+        codes = ["316140"]
         with st.container():
+            st.session_state.news_active_tab = "우리금융지주"
+
             st.markdown('<span class="chipbar-scope"></span>', unsafe_allow_html=True)
-            st.markdown('기준일자 : 2025.08.29')
             cols = st.columns(len(cats), gap="small")
             for i, c in enumerate(cats):
+                current_price, yield_data = stock_data.get_today_price_yield(codes[i])
+                sector = stock_data.get_industry(codes[i])
                 with cols[i]:
                     if st.session_state.news_active_tab == c:
-                        st.markdown(f'<span class="chip">{c + " +5%"}</span>', unsafe_allow_html=True)
+                        st.markdown(f'<span class="chip">'
+                                    f'{f"[{sector}] {c} ( {int(current_price):,}원({yield_data}) ) "}'
+                                    f'</span>', unsafe_allow_html=True)
                     else:
                         if st.button(c, key=f"alert_tab_{c}"):
                             st.session_state.news_active_tab = c

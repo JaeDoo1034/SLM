@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timedelta
+from pandas.tseries.offsets import BDay
 from slm_mcp.mcp_server import (
     call_sync,
     inquery_stock_price,
@@ -28,13 +29,32 @@ def get_stock_info(stock_code: str):
     return result
 
 def get_today_yield(stock_code: str):
+    result = get_stock_info(stock_code=stock_code)['prdy_ctrt'] + "%"
+    if result[0] != '-':
+        result = "+" + result
+    return result
+
+def get_today_price_yield(stock_code: str):
     result = get_stock_info(stock_code=stock_code)
-    return result['prdy_ctrt']
+    current_price = result['stck_prpr']
+    yield_data = result['prdy_ctrt'] + "%"
+    if yield_data[0] != '-':
+        yield_data = "+" + yield_data
+    return current_price, yield_data
 
 def get_industry(stock_code: str):
     result = get_stock_info(stock_code=stock_code)
     return result['bstp_kor_isnm']
 
+def get_business_day(date: str = datetime.now().strftime("%Y%m%d")):
+    _date = datetime.strptime(date, "%Y%m%d")
+    if _date.weekday() > 4:
+        return (_date - BDay(1)).strftime("%Y%m%d")
+    return _date.strftime("%Y%m%d")
+
 if __name__ == "__main__":
-    get_today_yield("005930")
-    get_today_yield("069500")
+    #get_today_price_yield("005930")
+    #get_today_price_yield("069500")
+
+    print(get_business_day())
+
