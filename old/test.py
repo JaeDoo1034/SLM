@@ -115,3 +115,4 @@ st.divider()
 if st.button("🔄 상태 초기화"):
     for k in st.session_state.status:
         st.session_state.status[k] = "waiting"
+
